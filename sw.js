@@ -1,6 +1,6 @@
 /* LSP Bot Academy service worker – offline support.
    Bump VERSION whenever any cached file changes. */
-const VERSION = 'v1';
+const VERSION = 'v2';
 const SHELL = `lsp-shell-${VERSION}`;
 const RUNTIME = `lsp-runtime-${VERSION}`;
 const SHELL_FILES = [
