@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="LSP Academy">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>LSP Trading Telegram Bot – Interactive Learning Portal</title>
+<meta name="description" content="Learn the LSP Trading Telegram Bot by playing with it: a practice Telegram simulator, safety-confirmation sandbox, profit-stairs slider, sample ledger and a 5-question quiz. No real money, no login.">
+<meta name="theme-color" content="#0284C7">
+<style>
+:root{
+  --blue:#0284C7; --blue-d:#1D4ED8; --blue-l:#EFF6FF; --green:#059669; --green-l:#ECFDF5;
+  --red:#DC2626; --red-l:#FEF2F2; --amber:#B45309; --amber-l:#FFFBEB;
+  --ink:#0F172A; --ink2:#334155; --mute:#64748B; --line:#E2E8F0; --bg:#F8FAFC; --card:#fff;
+  --r:16px; --shadow:0 10px 30px -12px rgba(15,23,42,.25);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,"Helvetica Neue",Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.55;font-size:16px}
+img{max-width:100%;display:block}
+button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+code{background:rgba(15,23,42,.07);padding:1px 6px;border-radius:5px;font-size:.92em}
+:focus-visible{outline:3px solid #F59E0B;outline-offset:2px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+section{padding:64px 0}
+section.alt{background:#fff;border-block:1px solid var(--line)}
+.eyebrow{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--blue)}
+h2{font-size:clamp(26px,4vw,36px);line-height:1.15;margin:6px 0 10px;font-weight:800;letter-spacing:-.02em}
+.lead{color:var(--ink2);max-width:680px;font-size:17px;margin-bottom:28px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:12px;font-weight:700;text-decoration:none;transition:transform .15s,box-shadow .15s,background .15s}
+.btn:hover{transform:translateY(-1px)}
+.btn:disabled{opacity:.45;cursor:default;transform:none}
+.btn.primary{background:linear-gradient(135deg,var(--blue),var(--blue-d));color:#fff;box-shadow:0 8px 20px -8px rgba(37,99,235,.7)}
+.btn.ghost{background:#fff;border:1.5px solid var(--line);color:var(--ink)}
+.btn.sm{padding:8px 14px;font-size:14px;border-radius:10px}
+.btn.green{background:var(--green);color:#fff}
+.btn.red{background:var(--red);color:#fff}
+.btn.amber{background:#B45309;color:#fff}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:22px}
+.chip{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:600;color:var(--ink2)}
+
+/* nav */
+nav.top{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav.top .wrap{display:flex;align-items:center;gap:18px;height:56px}
+.brand{display:flex;align-items:center;gap:8px;font-weight:800;white-space:nowrap;text-decoration:none;color:inherit}
+.brand i{font-style:normal;width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--blue),var(--blue-d));display:grid;place-items:center;color:#fff}
+.links{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;flex:1}
+.links a{padding:6px 11px;border-radius:8px;font-size:14px;font-weight:600;color:var(--ink2);text-decoration:none;white-space:nowrap}
+.links a:hover{background:var(--blue-l);color:var(--blue-d)}
+
+/* hero */
+.hero{padding:56px 0 48px;background:radial-gradient(circle at 80% 0%,#E0F2FE 0,transparent 55%),radial-gradient(circle at 0% 100%,#DBEAFE 0,transparent 50%)}
+.hero .grid{display:grid;grid-template-columns:1.2fr .8fr;gap:36px;align-items:center}
+.hero h1{font-size:clamp(34px,5.4vw,56px);line-height:1.05;letter-spacing:-.03em;font-weight:900}
+.hero h1 span{background:linear-gradient(135deg,var(--blue),var(--blue-d));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{font-size:19px;color:var(--ink2);margin:16px 0 24px;max-width:560px}
+.hero .cta{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:22px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.rules{display:grid;gap:12px}
+.rule{display:flex;gap:14px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px;box-shadow:var(--shadow)}
+.rule .e{font-size:28px}
+.rule b{display:block}
+.rule span{font-size:14px;color:var(--ink2)}
+
+/* glossary */
+.gloss{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+.gloss .gl{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px}
+.gloss .t{font-size:13px;color:var(--mute);text-decoration:line-through;text-decoration-color:#CBD5E1}
+.gloss .a{font-weight:800;font-size:17px;margin:2px 0 4px}
+.gloss .d{font-size:14px;color:var(--ink2)}
+
+/* simulator */
+.simgrid{display:grid;grid-template-columns:minmax(0,400px) 1fr;gap:40px;align-items:start}
+.phone{width:100%;max-width:390px;margin:0 auto;background:#0B1220;border-radius:46px;padding:11px;box-shadow:0 30px 60px -20px rgba(2,6,23,.55),inset 0 0 0 2px #334155}
+.screen{background:#fff;border-radius:36px;overflow:hidden;display:flex;flex-direction:column;height:720px;position:relative}
+.sbar{display:flex;justify-content:space-between;align-items:center;padding:9px 22px 4px;font-size:12px;font-weight:700;background:#517DA2;color:#fff}
+.sbar .notch{width:84px;height:18px;background:#0B1220;border-radius:12px;margin-top:-4px}
+.tghead{display:flex;align-items:center;gap:10px;padding:8px 12px 10px;background:#517DA2;color:#fff}
+.tghead .av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#38BDF8,#2563EB);display:grid;place-items:center;font-size:20px}
+.tghead b{display:block;font-size:15px;line-height:1.2}
+.tghead small{font-size:12px;opacity:.85}
+.chat{flex:1;min-height:0;overflow-y:auto;padding:12px 10px;background:#9DB9D1 radial-gradient(circle at 20% 20%,rgba(255,255,255,.18) 0 40px,transparent 41px) 0 0/90px 90px;display:flex;flex-direction:column;gap:6px;scroll-behavior:smooth}
+.msg{display:flex;flex-direction:column;max-width:92%;animation:pop .22s ease-out}
+.msg.bot{align-self:flex-start}
+.msg.me{align-self:flex-end}
+@keyframes pop{from{opacity:0;transform:translateY(8px) scale(.98)}to{opacity:1;transform:none}}
+.bubble{background:#fff;border-radius:14px 14px 14px 4px;padding:9px 11px 6px;font-size:13.5px;line-height:1.4;box-shadow:0 1px 1px rgba(0,0,0,.12);color:#0F172A}
+.msg.me .bubble{background:#EFFDDE;border-radius:14px 14px 4px 14px;font-weight:600}
+.bubble .ct{font-weight:800;font-size:13.5px;padding-bottom:5px;margin-bottom:5px;border-bottom:1px dashed #CBD5E1}
+.bubble .r{display:flex;justify-content:space-between;gap:12px;font-size:12.5px;margin:3px 0}
+.bubble .r span{color:#475569}
+.bubble .r b{text-align:right}
+.bubble .ft{font-size:12px;color:#475569;margin-top:6px;padding-top:5px;border-top:1px dashed #E2E8F0}
+.bubble .item{display:flex;gap:6px;font-size:12.5px;margin:3px 0}
+.bubble .item code{font-weight:700;color:#1D4ED8;white-space:nowrap;background:none;padding:0}
+.bubble pre{font-size:11px;line-height:1.45;background:#0F172A;color:#A7F3D0;padding:8px;border-radius:8px;overflow-x:auto;margin:4px 0}
+.bubble.warn{border-left:4px solid #F59E0B;background:#FFFBEB}
+.bubble.danger{border-left:4px solid var(--red);background:#FEF2F2}
+.bubble.ok{border-left:4px solid var(--green)}
+.time{display:block;text-align:right;font-size:10.5px;color:#94A3B8;margin-top:2px}
+.g{color:var(--green)}.rd{color:var(--red)}.bl{color:var(--blue-d)}
+.inline{display:grid;gap:3px;margin-top:3px}
+.inline .row{display:flex;gap:3px}
+.inline button{flex:1;background:rgba(40,60,90,.6);color:#fff;font-size:12.5px;font-weight:600;padding:8px 6px;border-radius:9px;backdrop-filter:blur(3px)}
+.inline button:hover:not(:disabled){background:rgba(40,60,90,.8)}
+.inline button.go{background:rgba(5,150,105,.9)}
+.inline button.stop{background:rgba(220,38,38,.9)}
+.inline button:disabled{opacity:.45;cursor:default}
+.typing .bubble{display:flex;gap:4px;padding:12px 14px}
+.typing i{width:7px;height:7px;border-radius:50%;background:#94A3B8;animation:bn 1s infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes bn{0%,60%,100%{transform:none;opacity:.5}30%{transform:translateY(-4px);opacity:1}}
+.composer{display:flex;align-items:center;gap:6px;padding:7px 8px;background:#fff;border-top:1px solid var(--line)}
+.composer input{flex:1;border:0;background:#F1F5F9;border-radius:18px;padding:9px 13px;font-size:14px;min-width:0}
+.composer button{width:34px;height:34px;border-radius:50%;font-size:16px;color:#517DA2}
+.composer button.send{background:#517DA2;color:#fff}
+.kb{background:#E8EDF2;padding:7px;display:grid;gap:5px;max-height:262px;overflow-y:auto}
+.kb .kr{display:grid;gap:5px}
+.kb button{background:#fff;border-radius:8px;padding:10px 4px;font-size:13px;font-weight:600;color:#1E293B;box-shadow:0 1px 0 rgba(0,0,0,.18);transition:transform .08s}
+.kb button:active{transform:scale(.96);background:#DBEAFE}
+.kb .pill{font-size:12px;padding:8px 2px}
+.kb .back{background:#DBEAFE;color:#1E40AF}
+.kb .kill{background:#FEE2E2;color:#B91C1C}
+.kb.hidden{display:none}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#0F172A;color:#fff;font-size:14px;padding:10px 18px;border-radius:999px;opacity:0;pointer-events:none;transition:opacity .25s;z-index:300;white-space:nowrap;box-shadow:var(--shadow)}
+.toast.show{opacity:1}
+.note{font-size:13px;color:var(--mute);text-align:center;margin-top:12px}
+
+/* side panel */
+.missions{margin-top:8px}
+.missions li{list-style:none;display:flex;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line);font-size:15px}
+.missions li:last-child{border:0}
+.missions .ck{width:24px;height:24px;border-radius:50%;border:2px solid #CBD5E1;display:grid;place-items:center;font-size:13px;color:#fff;flex:none;transition:all .25s}
+.missions li.done .ck{background:var(--green);border-color:var(--green)}
+.missions li.done span:last-child{color:var(--mute);text-decoration:line-through}
+.try{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.try button{background:var(--blue-l);color:var(--blue-d);font-weight:700;font-size:13px;padding:7px 12px;border-radius:999px;border:1px solid #BFDBFE}
+.try button:hover{background:#DBEAFE}
+.stack>*+*{margin-top:16px}
+h3{font-size:19px;margin-bottom:6px}
+
+/* sandbox */
+.sb-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:18px}
+.sb-card{border-radius:var(--r);padding:22px;border:2px solid;display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+.sb-card.live{background:var(--amber-l);border-color:#FCD34D}
+.sb-card.kill{background:var(--red-l);border-color:#FCA5A5}
+.sb-card.sl{background:var(--blue-l);border-color:#93C5FD}
+.sb-card .big{font-size:34px;line-height:1}
+.sb-card p{font-size:14.5px;color:var(--ink2);flex:1}
+.twocol{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.status{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
+.status div{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.status small{display:block;color:var(--mute);font-size:12px;font-weight:600}
+.status b{font-size:15px}
+.log{list-style:none;max-height:190px;overflow-y:auto;font-size:13.5px;font-family:ui-monospace,Menlo,Consolas,monospace}
+.log li{padding:5px 0;border-bottom:1px dashed var(--line)}
+.log time{color:var(--mute);margin-right:8px}
+
+/* modal */
+.ov{position:fixed;inset:0;background:rgba(15,23,42,.6);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;padding:18px;z-index:100}
+.ov.open{display:flex}
+.modal{background:#fff;border-radius:20px;max-width:440px;width:100%;overflow:hidden;box-shadow:0 30px 80px -20px rgba(0,0,0,.6);animation:pop .2s}
+.modal header{padding:18px 20px;display:flex;gap:12px;align-items:center;font-weight:800;font-size:18px}
+.modal.warn header{background:#FEF3C7;color:#92400E}
+.modal.danger header{background:#FEE2E2;color:#991B1B}
+.modal.info header{background:#DBEAFE;color:#1E40AF}
+.modal.ok header{background:#D1FAE5;color:#065F46}
+.modal header .e{font-size:30px}
+.modal .mb{padding:18px 20px}
+.modal .mb p{margin-bottom:10px;color:var(--ink2);font-size:15px}
+.modal .r{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px dashed var(--line);font-size:14.5px}
+.modal .acts{display:grid;gap:10px;padding:0 20px 20px}
+.modal .acts .btn{justify-content:center}
+.msn{font-size:44px;font-weight:900;text-align:center;font-variant-numeric:tabular-nums}
+
+/* stairs */
+.stairs{display:grid;grid-template-columns:minmax(0,340px) 1fr;gap:32px;align-items:start}
+.ladder{position:relative;height:460px;background:linear-gradient(#fff,#F8FAFC);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.axis{position:absolute;left:62px;top:0;bottom:0;width:6px;background:#E2E8F0}
+.tick{position:absolute;left:0;width:100%;height:0;border-top:1px dashed #E2E8F0}
+.tick span{position:absolute;left:8px;top:-9px;font-size:12px;font-weight:700;color:var(--mute);background:#fff;padding:0 3px}
+.tick.ms-t span{color:var(--blue-d)}
+.tick.entry{border-top:2px solid #94A3B8}
+.fill{position:absolute;left:62px;width:6px;background:linear-gradient(#34D399,var(--green));transition:height .12s}
+.dot{position:absolute;left:52px;width:26px;height:26px;margin-bottom:-13px;border-radius:50%;background:var(--blue-d);border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.35);display:grid;place-items:center;font-size:12px;transition:bottom .12s}
+.chipP{position:absolute;left:90px;margin-bottom:-12px;background:var(--blue-d);color:#fff;font-weight:800;font-size:13px;padding:2px 9px;border-radius:8px;white-space:nowrap;transition:bottom .12s}
+.slline{position:absolute;left:0;right:0;height:0;border-top:3px dashed;transition:bottom .4s cubic-bezier(.3,1.4,.5,1)}
+.slline.neg{border-color:var(--red)}.slline.pos{border-color:var(--green)}
+.slchip{position:absolute;right:8px;top:-25px;font-size:12px;font-weight:800;padding:2px 8px;border-radius:8px;color:#fff;white-space:nowrap}
+.neg .slchip{background:var(--red)}.pos .slchip{background:var(--green)}
+.peak{position:absolute;left:44px;width:42px;height:0;border-top:2px solid #94A3B8}
+.readouts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.ro{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px}
+.ro small{color:var(--mute);font-weight:600;font-size:13px}
+.ro b{display:block;font-size:28px;letter-spacing:-.02em;line-height:1.1;margin-top:2px}
+.ro em{font-style:normal;font-size:13px;color:var(--ink2)}
+input[type=range]{width:100%;height:36px;accent-color:var(--blue-d)}
+.msgbox{border-radius:14px;padding:14px 16px;font-size:15.5px;margin:12px 0;border:1px solid;transition:background .2s}
+.msgbox.neu{background:var(--bg);border-color:var(--line)}
+.msgbox.up{background:var(--green-l);border-color:#A7F3D0}
+.msgbox.bad{background:var(--red-l);border-color:#FECACA}
+.mscards{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:6px}
+.mscard{border:2px dashed #CBD5E1;border-radius:12px;padding:10px 6px;text-align:center;font-size:13px;color:var(--mute);transition:all .3s}
+.mscard b{display:block;font-size:15px;color:var(--ink2)}
+.mscard.on{border:2px solid var(--green);background:var(--green-l);color:var(--green);transform:translateY(-3px)}
+.mscard.on b{color:#065F46}
+.row-btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+
+/* ledger */
+.ledger{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start}
+.stmt{padding:0;overflow:hidden}
+.stmt header{background:linear-gradient(135deg,#0F172A,#1E3A8A);color:#fff;padding:18px 22px}
+.stmt header small{opacity:.75}
+.stmt header .bal{font-size:38px;font-weight:900;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.lr{width:100%;display:flex;align-items:center;gap:12px;padding:14px 22px;border-bottom:1px solid var(--line);text-align:left;transition:background .15s,opacity .3s}
+button.lr:hover{background:var(--bg)}
+.lr .ic{font-size:24px;width:34px;text-align:center}
+.lr .lt{flex:1}
+.lr .lt b{display:block;font-size:15.5px}
+.lr .lt small{color:var(--mute);font-size:13px}
+.lr .amt{font-weight:800;font-size:17px;font-variant-numeric:tabular-nums}
+.lr.hid{opacity:.15;filter:grayscale(1)}
+.lr .why{display:none;flex-basis:100%;font-size:14px;color:var(--ink2);padding:8px 12px;background:var(--blue-l);border-radius:10px;margin-left:46px}
+.lr.open{flex-wrap:wrap}.lr.open .why{display:block}
+.lr.total{background:var(--green-l)}
+.split{height:16px;border-radius:99px;overflow:hidden;display:flex;margin:10px 0 6px;background:#E2E8F0}
+.split i{display:block;transition:width .6s}
+.legend{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:13.5px;color:var(--ink2)}
+
+/* quiz */
+.quiz{max-width:720px;margin:0 auto}
+.qbar{height:8px;background:#E2E8F0;border-radius:99px;overflow:hidden;margin-bottom:18px}
+.qbar i{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--green));width:0;transition:width .4s}
+.q h3{font-size:21px;margin:4px 0 14px}
+.opt{display:block;width:100%;text-align:left;background:#fff;border:2px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:10px;font-size:16px;font-weight:600;transition:all .15s}
+.opt:hover:not(:disabled){border-color:var(--blue);background:var(--blue-l)}
+.opt.right{border-color:var(--green);background:var(--green-l)}
+.opt.wrong{border-color:var(--red);background:var(--red-l)}
+.opt:disabled{cursor:default;color:inherit}
+.explain{margin:8px 0 14px;padding:12px 14px;border-radius:12px;background:var(--amber-l);border:1px solid #FDE68A;font-size:15px}
+.badge-wrap{text-align:center}
+.badge-wrap canvas{max-width:100%;height:auto;border-radius:16px;box-shadow:var(--shadow);border:1px solid var(--line)}
+.badge-wrap input{padding:11px 14px;border:2px solid var(--line);border-radius:12px;font-size:16px;width:min(320px,100%);margin:6px 0 14px}
+.conf{position:fixed;top:-40px;font-size:26px;z-index:200;pointer-events:none;animation:fall 2.6s linear forwards}
+@keyframes fall{to{transform:translateY(115vh) rotate(540deg)}}
+
+/* pages gallery */
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
+.thumb{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;text-align:left;transition:transform .15s,box-shadow .15s}
+.thumb:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.thumb img{aspect-ratio:210/297;object-fit:cover;width:100%;background:#E2E8F0}
+.thumb span{display:block;padding:7px 9px;font-size:12.5px;font-weight:700}
+.ov.lb{flex-direction:column;gap:12px;color:#fff}
+.lb img{max-height:82vh;border-radius:10px;background:#fff}
+.lb .nav{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap}
+
+/* routine + faq + legend */
+.routine{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.routine h3 small{color:var(--mute);font-weight:600;font-size:13px}
+.routine li{margin:8px 0 0 18px;font-size:15px}
+details{background:#fff;border:1px solid var(--line);border-radius:14px;margin-bottom:10px;padding:0 18px}
+summary{cursor:pointer;font-weight:700;padding:15px 0;list-style:none;display:flex;justify-content:space-between;gap:12px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font-size:22px;color:var(--blue);line-height:1}
+details[open] summary::after{content:"–"}
+details p{padding-bottom:15px;color:var(--ink2)}
+.legendgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px}
+.legendgrid div{display:flex;gap:12px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 14px;font-size:14.5px}
+.legendgrid .e{font-size:26px}
+
+footer{background:#0F172A;color:#CBD5E1;padding:44px 0;font-size:14.5px}
+footer h2{color:#fff;font-size:26px}
+footer code{background:#1E293B;color:#E2E8F0}
+.disc{margin-top:22px;padding-top:18px;border-top:1px solid #1E293B;font-size:13px;color:#94A3B8}
+
+@media (max-width:900px){
+  .hero .grid,.simgrid,.stairs,.ledger,.twocol{grid-template-columns:1fr}
+  .sb-grid,.status{grid-template-columns:1fr}
+  .mscards{grid-template-columns:repeat(2,1fr)}
+  section{padding:44px 0}
+}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{overflow-x:hidden;-webkit-tap-highlight-color:transparent}
+button,.btn,.opt,.kb button{touch-action:manipulation}
+nav.top{padding-top:env(safe-area-inset-top)}
+.wrap{padding-left:max(20px,env(safe-area-inset-left));padding-right:max(20px,env(safe-area-inset-right))}
+footer{padding-bottom:max(44px,calc(24px + env(safe-area-inset-bottom)))}
+.toast{bottom:max(24px,calc(12px + env(safe-area-inset-bottom)));max-width:calc(100vw - 32px);white-space:normal;text-align:center}
+.composer input{font-size:16px} /* stops iOS zooming into the field */
+.kb button{min-height:42px}
+@media (max-width:640px){
+  html{scroll-padding-top:104px}
+  nav.top .wrap{flex-wrap:wrap;height:auto;gap:8px 10px;padding-top:8px;padding-bottom:6px}
+  .brand{flex:1}
+  .links{order:3;flex:0 0 100%;margin:0 -4px;padding-bottom:2px}
+  .links a{padding:9px 12px;font-size:14px}
+  .brand{min-width:0}
+  nav .navbtn{padding:9px 14px;white-space:nowrap}
+  nav .navbtn .lbl{display:none}
+  .wrap{padding-left:max(16px,env(safe-area-inset-left));padding-right:max(16px,env(safe-area-inset-right))}
+  .hero{padding:32px 0 28px}
+  .hero p{font-size:17px}
+  .hero .cta .btn{flex:1 1 100%;justify-content:center}
+  .lead{font-size:16px}
+  .btn.sm{min-height:42px}
+  .card{padding:18px}
+  .ladder{height:380px}
+  .ro b{font-size:24px}
+  .row-btns .btn{flex:1 1 100%;justify-content:center}
+  .opt{padding:15px 14px;font-size:15.5px}
+  .lr{padding:14px 16px}
+  .lr .why{margin-left:0}
+  .stmt header .bal{font-size:32px}
+  .gallery{grid-template-columns:repeat(2,1fr)}
+  .modal header{font-size:17px}
+}
+/* phone: drop the fake bezel and use the real screen */
+@media (max-width:480px){
+  .phone{padding:0;background:none;box-shadow:none;border-radius:0;max-width:none}
+  .screen{height:min(680px,calc(100svh - 150px));min-height:520px;border-radius:18px;border:1px solid var(--line);box-shadow:var(--shadow)}
+  .sbar{display:none}
+  .readouts{grid-template-columns:1fr 1fr}
+  .ro{padding:12px}
+  .inline button{min-height:42px}
+}
+@media (max-width:360px){.readouts{grid-template-columns:1fr}.mscards{grid-template-columns:1fr 1fr}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<nav class="top" aria-label="Sections">
+  <div class="wrap">
+    <a class="brand" href="#top"><i>🤖</i> LSP Bot Academy</a>
+    <div class="links">
+      <a href="#words">Plain words</a><a href="#sim">Telegram simulator</a><a href="#sandbox">Safety sandbox</a>
+      <a href="#stairs">Profit stairs</a><a href="#ledger">Money diary</a><a href="#quiz">Quiz</a><a href="#guide">PDF guide</a><a href="#faq">FAQ</a>
+    </div>
+    <button class="btn ghost sm install navbtn" type="button" aria-label="Install as app" hidden>📲<span class="lbl"> Install</span></button>
+    <a class="btn primary sm navbtn" href="LSP_Trading_Telegram_Bot_User_Guide.pdf" download aria-label="Download PDF guide">📥<span class="lbl"> PDF</span></a>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap grid">
+    <div>
+      <div class="eyebrow">Beginner-friendly · Zero jargon · 100% practice mode</div>
+      <h1>Learn your trading bot <span>by playing with it.</span></h1>
+      <p>Tap the buttons of a pretend Telegram bot, try the big red emergency brake, drag the profit stairs and earn your <b>Certified Safe Bot Trader</b> badge. Nothing here touches real money.</p>
+      <div class="cta">
+        <a class="btn primary" href="#sim">▶ Start the simulator</a>
+        <a class="btn ghost" href="LSP_Trading_Telegram_Bot_User_Guide.pdf" download>📥 Download the 13-page PDF</a>
+        <button class="btn ghost install" type="button" hidden>📲 Install as app</button>
+      </div>
+      <div class="chips"><span class="chip">👶 Made for complete beginners</span><span class="chip">🔒 2-step safety checks</span><span class="chip">⚡ 50 ms emergency stop</span></div>
+    </div>
+    <div class="rules" aria-label="The three golden rules">
+      <div class="rule"><span class="e">🦺</span><div><b>1. Always wear a helmet</b><span>The robot never buys anything without placing an instant safety net (Stop-Loss).</span></div></div>
+      <div class="rule"><span class="e">🛑</span><div><b>2. You hold the brake</b><span>Feeling scared? One tap on the Kill Switch stops everything in 50 ms.</span></div></div>
+      <div class="rule"><span class="e">❓</span><div><b>3. Double-check first</b><span>Before real money moves, the robot asks: “Are you really sure?”</span></div></div>
+    </div>
+  </div>
+</header>
+
+<section id="words" class="alt">
+  <div class="wrap">
+    <div class="eyebrow">Step 0 · Dictionary</div>
+    <h2>Seven big words, seven simple meanings</h2>
+    <p class="lead">You will see these words inside the bot. Here is what they really mean.</p>
+    <div class="gloss">
+      <div class="gl"><div class="t">Ledger</div><div class="a">📒 Your money diary</div><div class="d">Every rupee won, spent or saved is written down.</div></div>
+      <div class="gl"><div class="t">OMS</div><div class="a">⚔️ The order desk</div><div class="d">Where buying and selling slips are sent.</div></div>
+      <div class="gl"><div class="t">RMS</div><div class="a">🛡️ Your guardian shield</div><div class="d">Stops you from losing more than planned.</div></div>
+      <div class="gl"><div class="t">Margin</div><div class="a">💰 Shopping cash</div><div class="d">The money in your wallet that you can spend.</div></div>
+      <div class="gl"><div class="t">Stop-Loss</div><div class="a">🦺 Safety net</div><div class="d">Sells automatically so you never fall too far.</div></div>
+      <div class="gl"><div class="t">Target</div><div class="a">🎯 Winning prize goal</div><div class="d">The profit point where the robot sells and cheers.</div></div>
+      <div class="gl"><div class="t">Kill Switch</div><div class="a">🚨 The big red brake</div><div class="d">Closes everything and puts the bot to sleep.</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="sim">
+  <div class="wrap">
+    <div class="eyebrow">Module 1 · Telegram simulator</div>
+    <h2>Your bot, in a pretend phone</h2>
+    <p class="lead">Tap any key on the keyboard at the bottom of the phone — just like the real thing. Open a “room”, tap its commands, and use <b>🔙 Back to Main</b> to return. You can also type commands such as <code>/kill</code> or <code>/mode full</code>.</p>
+    <div class="simgrid">
+      <div>
+        <div class="phone">
+          <div class="screen">
+            <div class="sbar"><span>9:41</span><span class="notch"></span><span>5G ▂▄▆ 🔋</span></div>
+            <div class="tghead"><span aria-hidden="true">‹</span><div class="av">🤖</div><div><b>LSP Trading Bot <span style="font-size:10px;background:#93C5FD;color:#1E3A8A;border-radius:4px;padding:1px 4px;vertical-align:middle">BOT</span></b><small id="tgsub">bot</small></div></div>
+            <div class="chat" id="chat" role="log" aria-live="polite" aria-label="Chat with the practice bot"></div>
+            <form class="composer" id="composer" autocomplete="off">
+              <button type="button" id="kbToggle" aria-label="Show or hide keyboard" title="Show / hide keyboard">⌨️</button>
+              <input id="msg" placeholder="Message  (try /kill)" aria-label="Type a command" maxlength="60">
+              <button class="send" type="submit" aria-label="Send">➤</button>
+            </form>
+            <div class="kb" id="kb"></div>
+          </div>
+        </div>
+        <p class="note">🧪 Practice only — this simulator never contacts a broker.</p>
+      </div>
+
+      <div class="stack">
+        <div class="card">
+          <h3>🎯 Practice missions</h3>
+          <p style="color:var(--ink2);font-size:15px">Finish all five. They tick off by themselves as you play.</p>
+          <ul class="missions" id="missions"></ul>
+        </div>
+        <div class="card">
+          <h3>⚡ Quick tries</h3>
+          <p style="color:var(--ink2);font-size:15px">Not sure where to begin? Press one.</p>
+          <div class="try">
+            <button data-send="/margins">💰 Check my money</button>
+            <button data-send="/precheck">✅ Morning health check</button>
+            <button data-send="/mode full">🚀 Go live</button>
+            <button data-send="/cancel 101">🛡️ Cancel a safety net</button>
+            <button data-send="/kill">🚨 Big red brake</button>
+            <button data-send="/eod">📸 Report card</button>
+          </div>
+        </div>
+        <div class="card" style="background:var(--blue-l);border-color:#BFDBFE;box-shadow:none">
+          <h3>🧭 The 6 rooms</h3>
+          <ol style="margin-left:20px;font-size:15px;color:var(--ink2)">
+            <li><b>🔐 Broker Hub</b> – your bank door &amp; safe key</li>
+            <li><b>⚔️ OMS Orders</b> – the order desk</li>
+            <li><b>📊 Strategy</b> – the robot brain</li>
+            <li><b>🛡️ RMS &amp; Risk</b> – your guardian shield</li>
+            <li><b>📒 Ledger &amp; EOD</b> – your money diary</li>
+            <li><b>💻 System</b> – the health doctor</li>
+          </ol>
+          <p style="font-size:14px;margin-top:8px;color:var(--ink2)">Lost your buttons? Type <code>/menu</code> and they come back.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="sandbox" class="alt">
+  <div class="wrap">
+    <div class="eyebrow">Module 2 · 2-step confirmation sandbox</div>
+    <h2>Practice the scary buttons — safely</h2>
+    <p class="lead">Three actions can really change things, so the bot always stops and asks first. Try each one here. The phone above stays in sync.</p>
+    <div class="sb-grid">
+      <div class="sb-card live"><div class="big">🚀</div><h3>Switch to real money</h3><code>/mode full</code><p>Arms live trading. The bot shows your cash and its 7 health checks, then asks you to confirm.</p><button class="btn amber" data-dlg="live">Try it</button></div>
+      <div class="sb-card kill"><div class="big">🚨</div><h3>Big red brake</h3><code>/kill</code><p>Sells everything and cancels all orders in about 50 milliseconds, then puts the bot to sleep.</p><button class="btn red" data-dlg="kill">Try it</button></div>
+      <div class="sb-card sl"><div class="big">🦺</div><h3>Cancel a safety net</h3><code>/cancel 101</code><p>Removing a Stop-Loss leaves your trade “naked”. The bot warns you before it lets you.</p><button class="btn primary" data-dlg="sl">Try it</button></div>
+    </div>
+    <div class="card">
+      <div class="status" id="board"></div>
+      <div class="twocol">
+        <div><h3>📋 What the bot just did</h3><ul class="log" id="log"><li>Nothing yet — press a “Try it” button.</li></ul></div>
+        <div><h3>🔄 Start over</h3><p style="color:var(--ink2);font-size:15px;margin-bottom:12px">After a Kill the bot sleeps. In this practice room you can wake it up and reset every switch.</p><button class="btn ghost" id="resetBoard">↺ Reset practice board</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="stairs">
+  <div class="wrap">
+    <div class="eyebrow">Module 3 · Multi-R ratchet</div>
+    <h2>The profit stairs: your safety net only climbs</h2>
+    <p class="lead">Drag the price up. Each time it reaches a new step, the safety net jumps higher. Drag it back down — the net <b>stays</b> where it climbed to. That is how a winning trade is protected from turning into a loss.</p>
+    <div class="stairs">
+      <div class="ladder" id="ladder" aria-hidden="true"></div>
+      <div>
+        <div class="readouts">
+          <div class="ro"><small>Price is up by</small><b id="roPrice">0 pts</b><em id="roPriceR">₹0</em></div>
+          <div class="ro"><small>🛡️ Safety net sits at</small><b id="roSl">−25 pts</b><em id="roSlR">worst case −₹1,625</em></div>
+        </div>
+        <label for="slider" style="font-weight:700">Drag the price (0 → +120 points)</label>
+        <input type="range" id="slider" min="0" max="120" step="1" value="0">
+        <div class="msgbox neu" id="stMsg" role="status" aria-live="polite"></div>
+        <div class="mscards" id="msCards"></div>
+        <div class="row-btns">
+          <button class="btn primary sm" id="stPlay">▶ Auto-climb to +100</button>
+          <button class="btn ghost sm" id="stFall">📉 What if price falls now?</button>
+          <button class="btn ghost sm" id="stReset">↺ Reset</button>
+        </div>
+        <p class="note" style="text-align:left">In this example every point is worth ₹65, so +20 pts = ₹1,300 locked in.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="ledger" class="alt">
+  <div class="wrap">
+    <div class="eyebrow">Module 4 · Sample account ledger</div>
+    <h2>One day in your money diary</h2>
+    <p class="lead">Step through a sample day. Tap any row to see what it means in plain words.</p>
+    <div class="ledger">
+      <div class="card stmt">
+        <header><small>Wallet balance after this step</small><div class="bal" id="lgBal">₹0.00</div></header>
+        <div id="lgRows"></div>
+        <div style="padding:16px 22px;display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn primary sm" id="lgNext">Next step ▶</button>
+          <button class="btn ghost sm" id="lgAll">Show everything</button>
+          <button class="btn ghost sm" id="lgReset">↺ Restart</button>
+        </div>
+      </div>
+      <div class="stack">
+        <div class="card">
+          <h3>Where did the winnings go?</h3>
+          <p style="color:var(--ink2);font-size:15px">The robot won <b>₹3,025</b>. Government taxes and broker fees took part of it.</p>
+          <div class="split" aria-hidden="true"><i id="spKeep" style="width:0;background:var(--green)"></i><i id="spFee" style="width:0;background:#F59E0B"></i></div>
+          <div class="legend"><span>🟢 You keep <b>₹2,525</b> (83.5%)</span><span>🟠 Fees <b>₹500</b> (16.5%)</span></div>
+        </div>
+        <div class="card" style="background:var(--green-l);border-color:#A7F3D0">
+          <h3>The sum, written out</h3>
+          <p style="font-size:15.5px;line-height:1.9">₹23,050 <span style="color:var(--mute)">added</span> − ₹500 <span style="color:var(--mute)">withdrawn</span><br>+ ₹3,025 <span style="color:var(--mute)">won</span> − ₹500 <span style="color:var(--mute)">fees</span><br><b style="font-size:19px">= ₹25,075 in your wallet</b></p>
+          <p style="font-size:14px;color:var(--ink2);margin-top:6px">Net gain: ₹3,025 − ₹500 = <b>+₹2,525</b>. Sample numbers for learning only.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="quiz">
+  <div class="wrap">
+    <div class="eyebrow">Module 5 · Beginner quiz</div>
+    <h2>5 questions. Get them all right, earn your badge.</h2>
+    <p class="lead">Don’t worry — you can retry as many times as you like.</p>
+    <div class="quiz card" id="quizBox"></div>
+  </div>
+</section>
+
+<section id="guide" class="alt">
+  <div class="wrap">
+    <div class="eyebrow">Module 6 · Printable booklet</div>
+    <h2>Take the guide with you</h2>
+    <p class="lead">The full 13-page A4 booklet, ready to print or read offline. Tap a page to preview it here.</p>
+    <p style="margin-bottom:22px"><a class="btn primary" href="LSP_Trading_Telegram_Bot_User_Guide.pdf" download="LSP_Trading_Telegram_Bot_User_Guide.pdf">📥 Download LSP_Trading_Telegram_Bot_User_Guide.pdf</a> <span style="color:var(--mute);font-size:14px;margin-left:8px">≈ 4 MB</span></p>
+    <div class="gallery" id="gallery"></div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Daily routine</div>
+    <h2>Your day, in four easy blocks</h2>
+    <p class="lead">The same checklist as page 13 of the booklet.</p>
+    <div class="routine">
+      <div class="card"><h3>☀️ Morning <small>9:00–9:15</small></h3><ol><li>🔐 Broker Hub → <code>/login</code></li><li>💻 System → <code>/precheck</code> — all 7 gates green 🟢</li><li><code>/margins</code> — confirm your cash</li></ol></div>
+      <div class="card"><h3>📈 Anchor time <small>9:28–9:30</small></h3><ol><li>Robot records the 9:28 anchor price</li><li>📊 Strategy → <code>/strikes</code> to check the pick</li><li><code>/scan_start</code> to begin watching</li></ol></div>
+      <div class="card"><h3>☕ Market hours <small>9:30–3:00</small></h3><ol><li>Relax — the bot sends a card when it trades</li><li>Profit stairs lock gains (+25 → +20 floor)</li><li>Happy early? <code>/squareoff</code> to bank it</li></ol></div>
+      <div class="card"><h3>🌙 Wrap-up <small>3:30</small></h3><ol><li>📒 Ledger → <code>/eod</code> for your report card</li><li><code>/charges</code> to audit fees</li><li><code>/capital</code> for the 50/50 split</li></ol></div>
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="wrap">
+    <div class="eyebrow">Colour &amp; symbol guide</div>
+    <h2>What every emoji means</h2>
+    <p class="lead">Green means safe and happy. Red means stopped or protected.</p>
+    <div class="legendgrid">
+      <div><span class="e">🟢</span>Happy, connected, working — or money was won</div>
+      <div><span class="e">🔴</span>Danger, disconnected, or the breaker tripped</div>
+      <div><span class="e">🟡</span>Waiting, thinking, or “please double-check”</div>
+      <div><span class="e">🛡️</span>Your guardian shield is watching</div>
+      <div><span class="e">🎯</span>Your winning target</div>
+      <div><span class="e">🪜</span>Profit stairs moving the net up</div>
+      <div><span class="e">🚨</span>Emergency — act now</div>
+      <div><span class="e">💰</span>Cash in your wallet</div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap" style="max-width:820px">
+    <div class="eyebrow">FAQ</div>
+    <h2>Honest answers for beginners</h2>
+    <div style="margin-top:22px">
+      <details><summary>📱 What if my phone dies during a live trade?</summary><p>Nothing bad. The robot lives on a cloud computer in Mumbai (AWS), so it keeps watching prices and will use your profit exit or safety net even if your phone is off.</p></details>
+      <details><summary>💸 Can the robot lose all my money in one trade?</summary><p>No. Each trade’s risk is capped at 25–35 points, and the daily safety shield stops everything once your ₹5,000 daily loss budget is used.</p></details>
+      <details><summary>⏱️ How does the robot know when to sell?</summary><p>By strict rules. When your +25 point target hits it sells in about 50 ms. If the market keeps climbing, the profit stairs trail higher to protect extra gains.</p></details>
+      <details><summary>🔒 Why does it ask me twice for Live Mode?</summary><p>Because real money is sacred. Asking twice means you can’t switch to live trading by accident while the phone is in your pocket.</p></details>
+      <details><summary>🎮 Paper Mode vs Full Mode?</summary><p>Paper Mode uses pretend points for learning. Full Mode uses your real Zerodha cash on the real NSE exchange.</p></details>
+      <details><summary>☕ Can I stop early if I’m happy with the profit?</summary><p>Yes. Tap <code>/squareoff</code> to take the money home, then <code>/scan_stop</code> to let the robot rest.</p></details>
+      <details><summary>🏦 Where does my profit go?</summary><p>It stays in your regulated Zerodha account. You can withdraw it to your bank any time from Kite.</p></details>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <h2>Happy and safe trading 🌱</h2>
+    <p>Keep it disciplined, keep it simple, and let the rules protect you.</p>
+    <p style="margin:14px 0"><a class="btn primary" href="LSP_Trading_Telegram_Bot_User_Guide.pdf" download>📥 Download the PDF guide</a></p>
+    <p>Admin desk: <b style="color:#fff">@Prabu_Trader</b> · Broker: Zerodha Kite Connect · Cloud: AWS Mumbai (ap-south-1) · Emergency shortcut: <code>/kill force</code></p>
+    <p class="disc">This is an educational practice simulator. It does not connect to any broker, place orders or move money, and all figures are samples. Trading in derivatives carries a risk of loss; nothing here is investment advice.</p>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status"></div>
+<div class="ov" id="ov" role="dialog" aria-modal="true" aria-labelledby="mTitle"><div class="modal" id="modal"></div></div>
+<div class="ov lb" id="lb" role="dialog" aria-modal="true" aria-label="Guide page preview"></div>
+
+<script>
+(()=>{
+'use strict';
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const reduced=matchMedia('(prefers-reduced-motion:reduce)').matches;
+const sleep=ms=>new Promise(r=>setTimeout(r,reduced?0:ms));
+const store={get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}};
+const inr=(n,sign)=>{const s=Math.abs(n).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2});return (n<0?'−':sign&&n>0?'+':'')+'₹'+s};
+const inr0=(n,sign)=>inr(n,sign).replace(/\.00$/,'');
+const pad=n=>String(n).padStart(2,'0');
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+/* ================= shared practice state ================= */
+const PTS=65; // ₹ per point in the worked example (20 pts = ₹1,300)
+const fresh=()=>({live:false,killed:false,posOpen:true,slActive:true,scanning:true,loggedIn:true,asset:'NIFTY'});
+let S=fresh();
+const missionsDef=[['margins','Check your money with /margins'],['precheck','Run the 7-gate health check (/precheck)'],['live','Arm Live Mode the safe way (confirm /mode full)'],['keepsl','Try cancelling a safety net… then keep it'],['kill','Pull the Big Red Brake (/kill)']];
+const done=new Set(store.get('lsp_missions',[]));
+function mission(id){if(done.has(id))return;done.add(id);store.set('lsp_missions',[...done]);renderMissions();toast('✅ Mission complete!')}
+function renderMissions(){$('#missions').innerHTML=missionsDef.map(([id,t])=>`<li class="${done.has(id)?'done':''}"><span class="ck">${done.has(id)?'✓':''}</span><span>${t}</span></li>`).join('')}
+
+let tt;function toast(t){const el=$('#toast');el.textContent=t;el.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>el.classList.remove('show'),2200)}
+
+/* ================= chat engine ================= */
+const chat=$('#chat'), kb=$('#kb');
+let clock=9*60; const stamp=()=>{clock++;return pad(Math.floor(clock/60)%24)+':'+pad(clock%60)};
+let q=Promise.resolve(); const enqueue=fn=>(q=q.then(fn).catch(e=>console.error(e)));
+const scrollDown=()=>{chat.scrollTop=chat.scrollHeight};
+function userSay(text){const d=document.createElement('div');d.className='msg me';const b=document.createElement('div');b.className='bubble';b.textContent=text;const t=document.createElement('span');t.className='time';t.textContent=stamp()+' ✓✓';b.append(t);d.append(b);chat.append(d);scrollDown()}
+function typing(on){let el=$('.typing',chat);$('#tgsub').textContent=on?'typing…':'bot';if(on&&!el){el=document.createElement('div');el.className='msg bot typing';el.innerHTML='<div class="bubble"><i></i><i></i><i></i></div>';chat.append(el);scrollDown()}else if(!on&&el)el.remove()}
+function appendBot(m){
+  const d=document.createElement('div');d.className='msg bot';
+  d.innerHTML=`<div class="bubble ${m.tone||''}">${m.h}<span class="time">${stamp()}</span></div>`;
+  if(m.b){const k=document.createElement('div');k.className='inline';
+    m.b.forEach(r=>{const row=document.createElement('div');row.className='row';r.forEach(x=>{const b=document.createElement('button');b.type='button';b.textContent=x.t;if(x.c)b.dataset.c=x.c;if(x.a)b.dataset.a=x.a;if(x.s)b.className=x.s;row.append(b)});k.append(row)});d.append(k)}
+  chat.append(d);scrollDown();
+}
+async function botSay(m,delay=650){typing(true);await sleep(delay);typing(false);appendBot(m)}
+const say=(m,delay)=>enqueue(()=>botSay(m,delay));
+
+const R=(l,v,c='')=>`<div class="r"><span>${l}</span><b class="${c}">${v}</b></div>`;
+const C=(title,rows=[],foot='')=>`<div class="ct">${title}</div>${rows.join('')}${foot?`<div class="ft">${foot}</div>`:''}`;
+
+/* ---------- rooms + keyboard ---------- */
+const ROOMS={
+ broker:{label:'🔐 Broker Hub',title:'🔐 BROKER HUB',sub:'Your bank door & safe key',items:[['🚪','login','Log in to Zerodha with your safe token'],['💰','margins','See your shopping cash'],['🟢','session','Is the green connection light on?'],['👤','profile','Who am I logged in as?'],['🔒','logout','Lock the door (asks first)']]},
+ oms:{label:'⚔️ OMS Orders',title:'⚔️ OMS ORDERS',sub:'The buying, selling & order desk',items:[['🎛️','mode','Pick Practice (paper) or Real (full)'],['📋','orders','Today’s open order slips'],['🎯','target 25','Set your winning goal to +25 pts'],['⚡','squareoff','Sell right now & lock profit'],['🦺','cancel 101','Try cancelling safety net #101']]},
+ strategy:{label:'📊 Strategy',title:'📊 STRATEGY',sub:'The robot brain',items:[['🏷️','asset','Pick NIFTY, BANKNIFTY or SENSEX'],['🎯','strikes','See the 9:28 anchor & chosen contract'],['🚦','gates','Are the time gates open?'],['🟢','scan_start','Start the live price scanner'],['🛑','scan_stop','Let the scanner rest']]},
+ rms:{label:'🛡️ RMS & Risk',title:'🛡️ RMS & RISK',sub:'Your guardian safety shield',items:[['📊','rms','Daily loss budget & breaker'],['🪜','ratchet','The Multi-R profit stairs'],['💰','budget','How much loss budget is left'],['📉','drawdown','Today’s dip from the high'],['🔓','reset_rms','Clear a tripped breaker (admin)']]},
+ ledger:{label:'📒 Ledger & EOD',title:'📒 LEDGER & EOD',sub:'Your money diary & report card',items:[['📖','ledger','Today’s completed trades'],['🧾','charges','Brokerage, taxes & fees'],['🤝','capital','50/50 partner split'],['📸','eod','Colourful report-card photo'],['📥','csv','Export your diary as CSV']]},
+ system:{label:'💻 System',title:'💻 SYSTEM',sub:'The cloud health doctor',items:[['✅','precheck','Run the 7-gate health exam'],['🖥️','system','Cloud CPU, memory & disk'],['⚡','latency','How fast prices arrive'],['📜','logs','Last lines of activity'],['🔄','restart','Restart the service']]}
+};
+const roomByLabel=Object.fromEntries(Object.entries(ROOMS).map(([k,v])=>[v.label,k]));
+let kbState='main', kbHidden=false;
+function renderKb(){
+  kb.classList.toggle('hidden',kbHidden);kb.innerHTML='';
+  const row=(cols,keys)=>{const r=document.createElement('div');r.className='kr';r.style.gridTemplateColumns=`repeat(${cols},1fr)`;keys.forEach(k=>{const b=document.createElement('button');b.type='button';b.textContent=k.t;b.dataset.send=k.s;if(k.cl)b.className=k.cl;r.append(b)});kb.append(r)};
+  if(kbState==='main'){
+    const keys=Object.values(ROOMS).map(r=>({t:r.label,s:r.label}));
+    row(3,keys.slice(0,3));row(3,keys.slice(3));
+    row(5,[{t:'🟢 /status',s:'/status',cl:'pill'},{t:'📊 /positions',s:'/positions',cl:'pill'},{t:'💰 /margins',s:'/margins',cl:'pill'},{t:'✅ /precheck',s:'/precheck',cl:'pill'},{t:'⚠️ /kill',s:'/kill',cl:'pill kill'}]);
+    row(1,[{t:'⌨️ Hide Menu',s:'⌨️ Hide Menu',cl:'pill'}]);
+  }else{
+    row(2,ROOMS[kbState].items.map(([e,c])=>({t:`${e} /${c}`,s:'/'+c})));
+    row(1,[{t:'🔙 Back to Main',s:'🔙 Back to Main',cl:'back'}]);
+  }
+}
+
+/* ---------- routing ---------- */
+const press=text=>{userSay(text);return enqueue(()=>route(text))};
+async function route(text){
+  const t=text.trim();
+  if(roomByLabel[t])return openRoom(roomByLabel[t]);
+  if(t==='🔙 Back to Main'){kbState='main';renderKb();return botSay({h:C('🏠 MAIN MENU',[],'Pick a room with the buttons below.')},350)}
+  if(t==='⌨️ Hide Menu'){kbHidden=true;renderKb();return botSay({h:C('⌨️ Keyboard hidden',[],'Type <b>/menu</b> and send to bring it back.')},350)}
+  const mm=t.replace(/^[^\w/]+\s*/,'').match(/^\/([a-z_]+)(?:@\w+)?\s*(.*)$/i); // "💰 /margins" -> "/margins"
+  if(!mm)return botSay({h:C('🤔 I only understand buttons and /commands',[],'Try <b>/menu</b>, <b>/status</b> or <b>/help</b>.')},450);
+  const name=mm[1].toLowerCase(), arg=mm[2].trim().toLowerCase();
+  if(!Object.hasOwn(H,name))return botSay({h:C('❓ Unknown command <code>/'+esc(name)+'</code>',[],'Type <b>/help</b> to see what I know.')},450);
+  if(S.killed&&!['wake','menu','help','start','status','kill'].includes(name))return botSay({tone:'danger',h:C('😴 Bot is asleep after Kill',[],'In this practice room type <b>/wake</b> (or press “Reset practice board”) to start again.')},450);
+  return H[name](arg);
+}
+async function openRoom(k){
+  const r=ROOMS[k];kbState=k;kbHidden=false;renderKb();
+  await botSay({h:`<div class="ct">${r.title}</div><p style="color:#475569;margin-bottom:4px"><i>${r.sub}</i></p>`+r.items.map(([e,c,d])=>`<div class="item"><span>${e}</span><span><code>/${c}</code> – ${d}</span></div>`).join('')},550);
+}
+
+/* ---------- command handlers ---------- */
+const assets={NIFTY:['24,800.25','NIFTY24800CE','₹150.00'],BANKNIFTY:['53,120.40','BANKNIFTY53100CE','₹310.00'],SENSEX:['81,250.75','SENSEX81300CE','₹420.00']};
+const gate=(n,l,v)=>R(`Gate ${n}: ${l}`,'🟢 '+v);
+const H={
+ start:()=>botSay({tone:'ok',h:C('👋 Welcome to LSP Trading Bot',[],'This is a <b>practice</b> bot — nothing is real. Tap a room below, or try <b>💰 /margins</b>.')}),
+ menu:()=>{kbState='main';kbHidden=false;renderKb();return botSay({h:C('⌨️ Keyboard is back',[],'Choose a room below.')},350)},
+ help:()=>botSay({h:C('📖 Commands I know',[],'<b>/status /positions /margins /precheck /kill /mode /orders /target /squareoff /cancel /asset /strikes /gates /scan_start /scan_stop /rms /ratchet /budget /drawdown /ledger /charges /capital /eod /csv /system /latency /logs /menu</b>')}),
+ wake:()=>{S=fresh();renderBoard();return botSay({tone:'ok',h:C('☀️ Bot awake (practice reset)',[],'All switches are back to start: paper mode, safety net on.')})},
+ status:()=>botSay({h:C('🟢 BOT STATUS',[R('Mode',S.live?'🔴 LIVE (real money)':'🎮 PAPER (practice)',S.live?'rd':'g'),R('Broker session',S.loggedIn?'🟢 Active & Fresh':'🔴 Logged out'),R('Scanner',S.scanning&&!S.killed?'🟢 WATCHING TICKS':'⚪ OFF'),R('Circuit breaker','🟢 NOMINAL'),R('Kill switch',S.killed?'🔴 TRIPPED (asleep)':'🟢 Ready')]),b:[[{t:'📊 Positions',c:'/positions'},{t:'💰 Margins',c:'/margins'}]]}),
+ positions:()=>S.posOpen&&!S.killed?botSay({h:C('📊 OPEN POSITION',[R('Contract',S.asset+' '+assets[S.asset][1].replace(S.asset,'')),R('Quantity',PTS),R('Entry','₹150.00'),R('Last price','₹158.00'),R('Open profit','+₹520.00 (+8 pts)','g'),R('Safety net',S.slActive?'🛡️ SL #101 @ ₹125.00':'⚠️ NONE — NAKED!',S.slActive?'g':'rd'),R('Target','🎯 ₹175.00 (+25)')]),b:[[{t:'⚡ Square-off',c:'/squareoff'},{t:'🛡️ Cancel SL',c:'/cancel 101'}]]}):botSay({h:C('📭 No open positions',[],'You are flat — nothing is at risk right now.')}),
+ margins:()=>{mission('margins');return S.loggedIn?botSay({h:C('💰 ZERODHA ACCOUNT MARGINS',[R('Client ID','AB1234 (Active)'),R('Connection','🟢 Active & Fresh'),R('Available Cash','₹23,050.00','g'),R('Used Margin','₹0.00')]),b:[[{t:'🔄 Refresh',c:'/margins'},{t:'📋 Profile',c:'/profile'}],[{t:'⚡ Reconnect',c:'/login'},{t:'🚪 Logout',c:'/logout'}]]}):botSay({tone:'danger',h:C('🔴 Not connected',[],'Tap <b>/login</b> first.')})},
+ login:()=>{S.loggedIn=true;return botSay({tone:'ok',h:C('🔑 Logged in to Zerodha',[],'Your safe token is fresh. You only need to do this once each morning before 9:15.')},900)},
+ session:()=>botSay({h:C('🟢 SESSION',[R('Light',S.loggedIn?'🟢 Smiling (connected)':'🔴 Off'),R('Token','Fresh'),R('Broker','Zerodha Kite Connect')])}),
+ profile:()=>botSay({h:C('👤 PROFILE',[R('Client ID','AB1234'),R('Broker','Zerodha'),R('Role','Trader (demo)')])}),
+ logout:()=>botSay({tone:'warn',h:C('🔒 Log out?',[],'This locks the door until you log in again.'),b:[[{t:'🚪 Yes, log out',a:'logout_yes',s:'stop'},{t:'Stay logged in',a:'logout_no'}]]}),
+ mode:arg=>{
+  if(arg==='paper'){S.live=false;renderBoard();return botSay({tone:'ok',h:C('🎮 PAPER MODE',[],'Pretend points only. <b>Zero real rupees at risk.</b>')})}
+  if(arg==='full')return confirmLive();
+  return botSay({h:C('🎛️ TRADING MODE',[R('Now',S.live?'🔴 LIVE':'🎮 PAPER')],'Pick one. Going live will ask you to confirm.'),b:[[{t:'🎮 Paper (practice)',c:'/mode paper'},{t:'🚀 Full (real)',c:'/mode full',s:'stop'}]]});
+ },
+ orders:()=>!S.posOpen||S.killed?botSay({h:C('📋 ORDERS',[],'No open order slips.')}):botSay({h:C('📋 OPEN ORDERS',[R('#101 SL-M SELL',S.slActive?'trigger ₹125 · 🛡️ OPEN':'— cancelled —',S.slActive?'g':'rd'),R('#102 LIMIT SELL','₹175 · 🎯 waiting')])}),
+ target:arg=>{const n=parseInt(arg,10)||25;return botSay({tone:'ok',h:C('🎯 TARGET UPDATED',[R('New goal','+'+n+' pts'),R('Worth about','₹'+(n*PTS).toLocaleString('en-IN'),'g')],'Order #102 repriced in 50 ms.')},500)},
+ squareoff:()=>{if(!S.posOpen)return botSay({h:C('📭 Nothing to square off',[],'No trade is open.')});S.posOpen=false;S.slActive=false;renderBoard();log('Square-off: trade closed at market (+₹520).');return botSay({tone:'ok',h:C('⚡ SQUARED OFF',[R('Sold at','₹158.00'),R('Profit locked','+₹520.00 (+8 pts)','g')],'Safety net removed automatically because the trade is closed.')},800)},
+ cancel:arg=>{
+  const id=parseInt(arg,10);
+  if(!id)return botSay({h:C('Usage',[],'<code>/cancel 101</code> — cancel order number 101.')});
+  if(id!==101||!S.posOpen||!S.slActive)return botSay({h:C('🤷 Order #'+id+' not found',[],'It may already be closed or cancelled.')});
+  return confirmSl();
+ },
+ kill:arg=>arg==='force'?doKill(false):confirmKill(),
+ asset:arg=>{const a=arg.toUpperCase();if(Object.hasOwn(assets,a)){S.asset=a;return botSay({tone:'ok',h:C('🏷️ ASSET SET',[R('Trading',a)])},400)}return botSay({h:C('🏷️ CHOOSE ASSET',[R('Now',S.asset)]),b:[[{t:'NIFTY',c:'/asset nifty'},{t:'BANKNIFTY',c:'/asset banknifty'},{t:'SENSEX',c:'/asset sensex'}]]})},
+ strikes:()=>{const a=assets[S.asset];return botSay({h:C(`📊 STRATEGY TELEMETRY (${S.asset})`,[R('09:28 Anchor Spot',a[0]),R('Selected Contract',a[1]),R('Contract Premium',a[2]),R('Timing Gates (SC1–4)','🟢 ALLOWED'),R('Scanner Status',S.scanning?'🟢 WATCHING TICKS':'⚪ OFF')],'Sample numbers for learning.'),b:[[{t:'🟢 Scan Active',c:'/scan_start'},{t:'🎯 Strikes',c:'/strikes'}],[{t:'🚦 Gates',c:'/gates'},{t:'🛑 Scan Stop',c:'/scan_stop'}]]})},
+ gates:()=>botSay({h:C('🚦 TIMING GATES',['SC1','SC2','SC3','SC4'].map(g=>R(g,'🟢 OPEN')),'Open gates mean the robot is allowed to look for a trade right now.')}),
+ scan_start:()=>{S.scanning=true;return botSay({tone:'ok',h:C('🟢 SCANNER ON',[],'Watching live prices for a safe setup.')},500)},
+ scan_stop:()=>{S.scanning=false;return botSay({h:C('🛑 SCANNER OFF',[],'The robot is resting. Existing trades stay protected.')},500)},
+ rms:()=>botSay({h:C('🛡️ RISK MANAGEMENT SHIELD',[R('Daily Loss Budget','₹5,000.00'),R('Remaining Risk Buffer','₹5,000.00 (100%)','g'),R('Consecutive Losses','0 / 2 allowed'),R('Circuit Breaker','🟢 NOMINAL (Clear)'),R('Profit Stairs Active','STEP-LADDER (Multi-R)')]),b:[[{t:'📊 Status',c:'/rms'},{t:'🪜 Stairs',c:'/ratchet'}],[{t:'💰 Budget',c:'/budget'},{t:'📉 Drawdown',c:'/drawdown'}]]}),
+ ratchet:()=>botSay({h:C('🪜 MULTI-R PROFIT STAIRS',[R('+25 pts','net → +20 pts','g'),R('+50 pts','net → +40 pts','g'),R('+75 pts','net → +65 pts','g'),R('+100 pts','net → +90 pts','g')],'The net only climbs, never slides down. Try the <b>Profit Stairs</b> slider further down this page ⬇')}),
+ budget:()=>botSay({h:C('💰 LOSS BUDGET',[R('Daily budget','₹5,000.00'),R('Used today','₹0.00'),R('Remaining','₹5,000.00','g')])}),
+ drawdown:()=>botSay({h:C('📉 DRAWDOWN',[R('Today','₹0.00 (0%)','g')],'Drawdown = how far you have dipped from your best point today.')}),
+ reset_rms:()=>botSay({tone:'warn',h:C('🔓 Admin only',[],'The breaker is already 🟢 NOMINAL — nothing to reset.')}),
+ ledger:()=>botSay({h:C('📖 TODAY’S LEDGER',[R('NIFTY24800CE BUY','₹150.00'),R('NIFTY24800CE SELL','₹196.54'),R('Result','+₹3,025.00 (+46.5 pts)','g'),R('Win rate','1 / 1 (100%)')])}),
+ charges:()=>botSay({h:C('🧾 CHARGES (sample split)',[R('Broker brokerage','₹100.00'),R('Govt STT','₹250.00'),R('GST + SEBI + stamp','₹150.00'),R('<b>Total</b>','<b>−₹500.00</b>','rd')],'Every fee is audited to the single paise.')}),
+ capital:()=>botSay({h:C('🤝 PARTNER 50/50 SPLIT',[R('Net profit','+₹2,525.00','g'),R('Partner A (50%)','₹1,262.50'),R('Partner B (50%)','₹1,262.50')])}),
+ eod:()=>botSay({tone:'ok',h:C('📸 END-OF-DAY REPORT CARD',[R('Starting Capital','₹23,050.00'),R('Trading Profit','+₹3,025.00 (+46.5 pts)','g'),R('Govt Taxes & Fees','−₹500.00','rd'),R('Net Profit You Keep','+₹2,525.00','g'),R('Final Wallet Balance','₹25,075.00','bl')]),b:[[{t:'📖 Ledger',c:'/ledger'},{t:'🧾 Charges',c:'/charges'}],[{t:'🤝 Capital',c:'/capital'},{t:'📥 CSV Export',c:'/csv'}]]},900),
+ csv:()=>botSay({h:C('📥 CSV EXPORT',[],'<b>trade_diary_today.csv</b> would arrive here (practice: no file is made).')}),
+ precheck:()=>{mission('precheck');return botSay({tone:'ok',h:C('✅ 7-GATE PREFLIGHT HEALTHCHECK',[gate(1,'Crypto Vault','PASS (Encrypted)'),gate(2,'Zerodha Auth','PASS (Active)'),gate(3,'WebSocket Ticker','PASS (34ms lag)'),gate(4,'System Clock','PASS (&lt;0.1s skew)'),gate(5,'Database WAL','PASS (Healthy)'),gate(6,'Risk Shield','PASS (Armed)'),gate(7,'Cloud Server','PASS (CPU 12%)'),R('<b>Verdict</b>','<b>🟢 READY FOR LIVE TRADING</b>','g')],'If any gate fails, real-money trading is refused.'),b:[[{t:'✅ Precheck',c:'/precheck'},{t:'⚡ Latency',c:'/latency'}],[{t:'📜 Logs',c:'/logs'},{t:'🔄 Restart',c:'/restart'}]]},1100)},
+ system:()=>botSay({h:C('🖥️ CLOUD SERVER',[R('Host','AWS Mumbai (ap-south-1)'),R('CPU','12%','g'),R('Memory','41%','g'),R('Disk','28%','g')])}),
+ latency:()=>botSay({h:C('⚡ LATENCY',[R('Price tick lag','34 ms','g'),R('Order speed','≈ 50 ms','g')],'Under 50 ms means prices arrive faster than a blink.')}),
+ logs:()=>botSay({h:C('📜 LAST ACTIVITY',[],'<pre>09:00:02 login ok\n09:00:05 precheck 7/7 pass\n09:28:00 anchor 24800.25\n09:31:12 scan: setup found\n09:31:12 BUY NIFTY24800CE\n09:31:12 SL #101 placed</pre>')}),
+ restart:()=>botSay({tone:'warn',h:C('🔄 Restart requested',[],'Practice mode: nothing was restarted.')})
+};
+
+/* ================= confirmations (shared by chat + sandbox) ================= */
+const confirmLive=()=>S.live
+  ?botSay({h:C('🔴 Already LIVE',[],'Use <code>/mode paper</code> to go back to practice.')})
+  :botSay({tone:'warn',h:C('⚠️ CONFIRM LIVE EXECUTION (FULL)',[R('Real capital will be traded on','NSE'),R('Available Cash','₹23,050.00','g'),R('Daily Loss Limit','₹5,000.00'),R('Safety Preflight','🟢 7 Gates Passed')],'<b>Real money at risk.</b> Are you really sure?'),b:[[{t:'🚀 Confirm Live',a:'live_yes',s:'go'},{t:'🛡️ Stay Safe (Cancel)',a:'live_no'}]]},700);
+const confirmKill=()=>S.killed
+  ?botSay({h:C('😴 Already asleep',[],'The kill switch has already been used.')})
+  :botSay({tone:'danger',h:C('🚨 EMERGENCY KILL SWITCH',[],'This will <b>sell everything now</b>, cancel all orders, stop the scanner and put the bot to sleep.'),b:[[{t:'🔴 YES, FLATTEN ALL',a:'kill_yes',s:'stop'}],[{t:'Cancel – keep trading',a:'kill_no'}]]},600);
+const confirmSl=()=>botSay({tone:'warn',h:C('🦺 CANCEL SAFETY NET #101?',[R('Protects','NIFTY24800CE × 65'),R('If removed','⚠️ Trade is NAKED','rd')],'Without a Stop-Loss, a falling price has <b>nothing to catch it</b>.'),b:[[{t:'🛡️ Keep my safety net',a:'sl_keep',s:'go'}],[{t:'Cancel it anyway',a:'sl_cancel',s:'stop'}]]},600);
+
+/* each ACT returns {tone,e,title,text} so both the chat and the sandbox modal can show the result */
+const ACT={
+ live_yes(){S.live=true;renderBoard();log('LIVE MODE armed after 2-step confirmation.');mission('live');return {tone:'ok',e:'🚀',title:'LIVE MODE ARMED',text:'Real trading is on. You confirmed twice — nothing happened by accident.'}},
+ live_no(){log('Live mode cancelled — stayed safe.');return {tone:'info',e:'🛡️',title:'You stayed safe',text:'Still in Paper Mode. Zero real rupees at risk.'}},
+ kill_yes:()=>doKill(true),
+ kill_no(){log('Kill cancelled — trading continues.');return {tone:'info',e:'👍',title:'Kill cancelled',text:'Nothing changed. The robot keeps watching.'}},
+ sl_keep(){log('SL #101 kept. Trade still protected.');mission('keepsl');return {tone:'ok',e:'🛡️',title:'Good choice!',text:'Safety net #101 is still in place. Your trade is protected.'}},
+ sl_cancel(){S.slActive=false;renderBoard();log('SL #101 cancelled — trade is NAKED.');return {tone:'danger',e:'⚠️',title:'Trade is now NAKED',text:'No safety net! If price drops, nothing will sell for you. A real trader would replace it immediately.'}},
+ logout_yes(){S.loggedIn=false;return {tone:'info',e:'🚪',title:'Logged out',text:'Tap /login to come back.'}},
+ logout_no:()=>({tone:'info',e:'👍',title:'Still logged in',text:'Nothing changed.'})
+};
+function doKill(asAct){
+  if(S.killed)return asAct?{tone:'info',e:'😴',title:'Already asleep',text:'The kill switch has already been used.'}:botSay({h:C('😴 Already asleep')});
+  const ms=38+Math.floor(Math.random()*12);
+  S.killed=true;S.live=false;S.posOpen=false;S.slActive=false;S.scanning=false;renderBoard();
+  log(`KILL SWITCH: flattened everything in ${ms} ms. Bot asleep.`);mission('kill');
+  return asAct?{tone:'danger',e:'🛑',title:`FLATTENED in ${ms} ms`,text:'All positions closed, all orders cancelled, scanner stopped. The bot is asleep.',ms}
+              :botSay({tone:'danger',h:C(`🛑 KILLED — flattened in ${ms} ms`,[],'Everything closed. Bot asleep. (Practice: type <b>/wake</b>.)')},300);
+}
+const resultMsg=r=>({tone:r.tone==='info'?'':r.tone,h:C(`${r.e} ${esc(r.title)}`,[],r.text)});
+
+/* inline-button clicks inside the chat */
+chat.addEventListener('click',e=>{
+  const b=e.target.closest('.inline button');if(!b||b.disabled)return;
+  if(b.dataset.c){const c=b.dataset.c;userSay(c);enqueue(()=>route(c))}
+  else if(b.dataset.a){
+    $$('button',b.closest('.inline')).forEach(x=>x.disabled=true);
+    const name=b.dataset.a;
+    enqueue(async()=>{const r=await ACT[name]();await botSay(resultMsg(r),r.ms?250:500)});
+  }
+});
+document.addEventListener('click',e=>{const b=e.target.closest('[data-send]');if(!b)return;press(b.dataset.send);if(b.closest('.try'))chat.closest('.phone').scrollIntoView({block:'center'})});
+$('#composer').addEventListener('submit',e=>{e.preventDefault();const i=$('#msg'),v=i.value.trim();if(!v)return;i.value='';press(v)});
+$('#kbToggle').addEventListener('click',()=>{kbHidden=!kbHidden;renderKb()});
+
+/* ================= sandbox ================= */
+const logEl=$('#log');let logged=false;
+function log(t){const d=new Date();if(!logged){logEl.innerHTML='';logged=true}const li=document.createElement('li');li.innerHTML=`<time>${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}</time>`;li.append(document.createTextNode(t));logEl.prepend(li)}
+function renderBoard(){
+  $('#board').innerHTML=
+   `<div><small>Trading mode</small><b>${S.live?'🔴 LIVE (real money)':'🎮 PAPER (practice)'}</b></div>`+
+   `<div><small>Kill switch</small><b>${S.killed?'🛑 TRIPPED – bot asleep':'🟢 Ready'}</b></div>`+
+   `<div><small>Safety net #101</small><b>${S.killed||!S.posOpen?'— no open trade —':S.slActive?'🛡️ Active':'⚠️ Cancelled – NAKED'}</b></div>`;
+}
+$('#resetBoard').addEventListener('click',()=>{S=fresh();renderBoard();logEl.innerHTML='<li>Board reset. Everything is back to the start.</li>';logged=false;toast('Practice board reset');say({tone:'ok',h:C('☀️ Practice board reset',[],'Paper mode, safety net on, bot awake.')},300)});
+
+const ov=$('#ov'),modal=$('#modal');let lastFocus=null;
+function openModal(html,tone){lastFocus=document.activeElement;modal.className='modal '+tone;modal.innerHTML=html;ov.classList.add('open');const f=$('button',modal);f&&f.focus()}
+function closeModal(){ov.classList.remove('open');lastFocus&&lastFocus.focus&&lastFocus.focus()}
+ov.addEventListener('click',e=>{if(e.target===ov)closeModal()});
+const showResult=r=>openModal(`<header><span class="e">${r.e}</span><span id="mTitle">${esc(r.title)}</span></header><div class="mb"><p>${r.text}</p></div><div class="acts"><button class="btn ghost" data-close>Close</button></div>`,r.tone==='danger'?'danger':r.tone==='ok'?'ok':'info');
+function dlg(kind){
+  if(S.killed&&kind!=='kill')return toast('Bot is asleep — press “Reset practice board”');
+  if(kind==='live'){
+    if(S.live)return toast('Already LIVE — reset the board to retry');
+    openModal(`<header><span class="e">⚠️</span><span id="mTitle">Confirm live execution?</span></header><div class="mb"><p><b>Real capital will be traded</b> on the NSE exchange.</p><div class="r"><span>Available cash</span><b class="g">₹23,050.00</b></div><div class="r"><span>Daily loss limit</span><b>₹5,000.00</b></div><div class="r"><span>Safety preflight</span><b>🟢 7 gates passed</b></div></div><div class="acts"><button class="btn green" data-act="live_yes">🚀 Confirm Live</button><button class="btn ghost" data-act="live_no">🛡️ Stay Safe (Cancel)</button></div>`,'warn');
+  }else if(kind==='kill'){
+    if(S.killed)return toast('Kill already used — reset the board');
+    openModal(`<header><span class="e">🚨</span><span id="mTitle">Emergency kill switch</span></header><div class="mb"><p>This will, <b>instantly</b>:</p><div class="r"><span>Sell every open trade</span><b>✔</b></div><div class="r"><span>Cancel all pending orders</span><b>✔</b></div><div class="r"><span>Stop the scanner</span><b>✔</b></div><div class="r"><span>Put the bot to sleep</span><b>✔</b></div></div><div class="acts"><button class="btn red" data-act="kill_yes">🔴 YES, FLATTEN ALL</button><button class="btn ghost" data-act="kill_no">Cancel – keep trading</button></div>`,'danger');
+  }else{
+    if(!S.slActive||!S.posOpen)return toast('No safety net to cancel — reset the board');
+    openModal(`<header><span class="e">🦺</span><span id="mTitle">Cancel safety net #101?</span></header><div class="mb"><p>Order <b>#101</b> is the Stop-Loss protecting your open trade.</p><p style="color:var(--red);font-weight:700">If you cancel it, your trade is “naked”: nothing will sell if the price falls.</p></div><div class="acts"><button class="btn green" data-act="sl_keep">🛡️ Keep my safety net</button><button class="btn ghost" data-act="sl_cancel">Cancel it anyway</button></div>`,'warn');
+  }
+}
+document.addEventListener('click',e=>{const d=e.target.closest('[data-dlg]');if(d)dlg(d.dataset.dlg)});
+modal.addEventListener('click',async e=>{
+  if(e.target.closest('[data-close]'))return closeModal();
+  const a=e.target.closest('[data-act]');if(!a)return;
+  const r=await ACT[a.dataset.act]();
+  if(r.ms){ // animate the ~50 ms flatten counter
+    modal.className='modal danger';modal.innerHTML=`<header><span class="e">🚨</span><span id="mTitle">Flattening…</span></header><div class="mb"><div class="msn" id="msN">0 ms</div></div>`;
+    const t0=performance.now(),dur=reduced?0:600;
+    await new Promise(res=>{const f=()=>{const k=dur?Math.min(1,(performance.now()-t0)/dur):1;$('#msN').textContent=Math.round(r.ms*k)+' ms';k<1?requestAnimationFrame(f):res()};f()});
+  }
+  showResult(r);
+  say(resultMsg(r),400);
+});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){if(ov.classList.contains('open'))closeModal();if(lb.classList.contains('open'))closeLb()}
+  if(e.key==='Tab'&&ov.classList.contains('open')){const f=$$('button',modal);if(!f.length)return;const a=f[0],z=f[f.length-1];if(e.shiftKey&&document.activeElement===a){e.preventDefault();z.focus()}else if(!e.shiftKey&&document.activeElement===z){e.preventDefault();a.focus()}}
+});
+
+/* ================= profit stairs ================= */
+const STEPS=[[25,20],[50,40],[75,65],[100,90]], INIT=-25, LOW=-32, HIGH=132;
+let price=0, peak=0, fell=false, timer=null;
+const pct=v=>((v-LOW)/(HIGH-LOW)*100).toFixed(2)+'%';
+const sgn=v=>(v>0?'+':v<0?'−':'')+Math.abs(v);
+const money=pts=>inr0(pts*PTS,true);
+const floorFor=p=>{let f=INIT;for(const [t,s] of STEPS)if(p>=t)f=s;return f};
+$('#ladder').innerHTML=`<div class="axis"></div>`+[-25,0,25,50,75,100,120].map(v=>`<div class="tick ${v===0?'entry':STEPS.some(s=>s[0]===v)?'ms-t':''}" style="bottom:${pct(v)}"><span>${sgn(v)}</span></div>`).join('')+
+ `<div class="fill" id="lFill"></div><div class="peak" id="lPeak"></div><div class="slline neg" id="lSl"><span class="slchip" id="lSlC"></span></div><div class="chipP" id="lChip"></div><div class="dot" id="lDot">📈</div>`;
+$('#msCards').innerHTML=STEPS.map(([t,f],i)=>`<div class="mscard"><b>🪜 Step ${i+1}</b>at +${t} pts<br>net → +${f}</div>`).join('');
+function renderStairs(){
+  const fl=floorFor(peak);
+  const f=$('#lFill');f.style.bottom=pct(0);f.style.height=(Math.max(0,price)/(HIGH-LOW)*100).toFixed(2)+'%';
+  $('#lDot').style.bottom=pct(price);$('#lChip').style.bottom=pct(price);$('#lChip').textContent=sgn(price)+' pts';
+  const pk=$('#lPeak');pk.style.bottom=pct(peak);pk.style.display=peak>price?'block':'none';
+  const sl=$('#lSl');sl.style.bottom=pct(fl);sl.className='slline '+(fl>0?'pos':'neg');
+  $('#lSlC').textContent='🛡️ net '+sgn(fl);
+  $('#roPrice').textContent=sgn(price)+' pts';
+  $('#roPriceR').textContent=price===0?'at your entry price':money(price)+' on paper';
+  $('#roSl').textContent=sgn(fl)+' pts';$('#roSl').style.color=fl>0?'var(--green)':'var(--red)';
+  $('#roSlR').textContent=fl>0?`${money(fl)} guaranteed`:`worst case ${money(fl)}`;
+  $$('.mscard').forEach((c,i)=>c.classList.toggle('on',peak>=STEPS[i][0]));
+  let cls='neu',txt;
+  if(fell){cls=fl>0?'up':'bad';txt=fl>0
+    ?`📉 Price turned around and touched the safety net. The robot sold at <b>+${fl} pts</b> — you walk away with <b>${money(fl)}</b>. A winning trade did <b>not</b> turn into a loss.`
+    :`📉 Price fell to the safety net. The robot sold at <b>−${-fl} pts</b> (${money(fl)}). That is the most this trade could ever cost — the net did its job.`}
+  else if(peak<25)txt=`Price is climbing, but it hasn't reached the first step yet. The safety net stays at its starting spot (<b>−25 pts</b>), so the most you can lose is ${money(INIT).replace('−','')}.`;
+  else{cls='up';const n=STEPS.filter(x=>peak>=x[0]).length;txt=`<b>Milestone ${n} unlocked!</b> 🎉 The safety net jumped up to <b>+${fl} pts</b>. Even if the market reverses right now, you keep <b>${money(fl)}</b>.`+(price<peak?` <i>(You dragged back down, but the net stayed — it never slides down.)</i>`:'')}
+  const box=$('#stMsg');box.className='msgbox '+cls;box.innerHTML=txt;
+}
+function stopPlay(){clearInterval(timer);timer=null;$('#stPlay').textContent='▶ Auto-climb to +100'}
+$('#slider').addEventListener('input',e=>{stopPlay();price=+e.target.value;fell=false;peak=Math.max(peak,price);renderStairs()});
+$('#stPlay').addEventListener('click',()=>{
+  if(timer)return stopPlay();
+  fell=false;if(price>=100||price<0){price=0;peak=0}
+  $('#stPlay').textContent='⏸ Pause';
+  timer=setInterval(()=>{price++;peak=Math.max(peak,price);$('#slider').value=price;renderStairs();if(price>=100)stopPlay()},reduced?5:60);
+});
+$('#stFall').addEventListener('click',()=>{stopPlay();fell=true;price=floorFor(peak);$('#slider').value=Math.max(0,price);renderStairs()});
+$('#stReset').addEventListener('click',()=>{stopPlay();price=0;peak=0;fell=false;$('#slider').value=0;renderStairs()});
+renderStairs();
+
+/* ================= ledger ================= */
+const LROWS=[
+ {i:'💵',t:'Cash you added',s:'Money put into your Zerodha wallet',a:23050,why:'This is the shopping cash you started with — your “seed money”.'},
+ {i:'🏧',t:'You withdrew',s:'Money taken back to your bank',a:-500,why:'You took ₹500 out. It is yours, so it simply leaves the wallet.'},
+ {i:'📈',t:'Trading profit won',s:'+46.5 pts today',a:3025,why:'The robot bought low and sold higher. 46.5 points gained added up to ₹3,025.'},
+ {i:'🧾',t:'Taxes & fees',s:'Government + broker bill',a:-500,why:'Every trade pays brokerage and government taxes (STT, GST, SEBI). Today’s bill was ₹500.'}
+];
+let lStep=0, curBal=0;
+function countTo(el,to){const from=curBal,t0=performance.now(),dur=reduced?0:500;curBal=to;const f=()=>{const k=dur?Math.min(1,(performance.now()-t0)/dur):1;el.textContent=inr(from+(to-from)*k);if(k<1)requestAnimationFrame(f)};f()}
+function renderLedger(){
+  let bal=0;const bals=LROWS.map(r=>bal+=r.a), full=lStep>=LROWS.length;
+  $('#lgRows').innerHTML=LROWS.map((r,i)=>`<button class="lr ${i>=lStep?'hid':''}" data-i="${i}" aria-expanded="false"><span class="ic">${r.i}</span><span class="lt"><b>${r.t}</b><small>${r.s}</small></span><span class="amt ${r.a<0?'rd':'g'}">${inr0(r.a,true)}</span><span class="why">${r.why}</span></button>`).join('')+
+   `<div class="lr total ${full?'':'hid'}"><span class="ic">🏆</span><span class="lt"><b>Net profit you keep</b><small>₹3,025 won − ₹500 fees</small></span><span class="amt g">+₹2,525</span></div>`+
+   `<div class="lr ${full?'':'hid'}"><span class="ic">👛</span><span class="lt"><b>Final balance in wallet</b><small>What is in your account tonight</small></span><span class="amt bl">₹25,075</span></div>`;
+  countTo($('#lgBal'),lStep?bals[lStep-1]:0);
+  $('#spKeep').style.width=full?'83.5%':'0';$('#spFee').style.width=full?'16.5%':'0';
+  $('#lgNext').disabled=full;
+}
+$('#lgRows').addEventListener('click',e=>{const b=e.target.closest('button.lr');if(!b||b.classList.contains('hid'))return;b.setAttribute('aria-expanded',b.classList.toggle('open'))});
+$('#lgNext').addEventListener('click',()=>{lStep++;renderLedger()});
+$('#lgAll').addEventListener('click',()=>{lStep=LROWS.length;renderLedger()});
+$('#lgReset').addEventListener('click',()=>{lStep=0;renderLedger()});
+renderLedger();
+
+/* ================= quiz + badge ================= */
+const QS=[
+ {q:'What does a Stop-Loss (the “safety net”) do?',o:['Doubles your profit','Sells automatically if price falls to a set point, so you never fall too far','Sends you a daily photo'],c:1,e:'The robot never buys without placing one — it is the helmet in Golden Rule #1.'},
+ {q:'Why does the bot ask you TWICE before switching to Live Mode (/mode full)?',o:['Because real money is at risk and it must never happen by accident','Because Telegram is slow','To collect your password'],c:0,e:'Real money is sacred. Two steps mean a stray tap in your pocket can’t arm live trading.'},
+ {q:'Your phone battery dies in the middle of a live trade. What happens?',o:['The trade is lost','Everything freezes until you charge it','The robot keeps running on the cloud and still uses your safety net'],c:2,e:'The bot lives on a dedicated cloud computer (AWS Mumbai), not on your phone.'},
+ {q:'Price rises +25 points. Where do the profit stairs move your safety net?',o:['Down to −35 points','Up to +20 points, locking in profit','It stays exactly where it was'],c:1,e:'+25 → +20 means at least +₹1,300 is guaranteed. The net only climbs, it never slides back down.'},
+ {q:'You feel scared and want everything closed right now. What do you tap?',o:['/menu','/ledger','⚠️ /kill – the big red brake'],c:2,e:'Kill closes all trades and orders in about 50 ms. Use /kill force to skip the confirmation question.'}
+];
+const box=$('#quizBox');let qi=0,score=0,answered=false;
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+function quizStart(){qi=0;score=0;renderQ()}
+function renderQ(){
+  const Q=QS[qi];answered=false;
+  const opts=shuffle(Q.o.map((t,i)=>({t,ok:i===Q.c})));
+  box.innerHTML=`<div class="qbar" role="progressbar" aria-label="Quiz progress" aria-valuemin="0" aria-valuemax="5" aria-valuenow="${qi}"><i></i></div><div class="q"><small style="color:var(--mute);font-weight:700">QUESTION ${qi+1} OF ${QS.length}</small><h3>${Q.q}</h3>${opts.map((o,i)=>`<button class="opt" data-ok="${o.ok}">${'ABC'[i]}.&nbsp; ${o.t}</button>`).join('')}<div id="qx"></div></div>`;
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{$('.qbar i',box).style.width=(qi/QS.length*100)+'%'}));
+}
+box.addEventListener('click',e=>{
+  const o=e.target.closest('.opt');
+  if(o&&!answered){
+    answered=true;const ok=o.dataset.ok==='true';if(ok)score++;
+    $$('.opt',box).forEach(b=>{b.disabled=true;if(b.dataset.ok==='true')b.classList.add('right');else if(b===o)b.classList.add('wrong')});
+    $('#qx').innerHTML=`<div class="explain">${ok?'✅ Correct! ':'❌ Not quite. '}${QS[qi].e}</div><button class="btn primary" id="qNext">${qi<QS.length-1?'Next question ▶':'See my result ▶'}</button>`;
+    $('#qNext').focus();return;
+  }
+  const id=e.target.closest('button')?.id;
+  if(id==='qNext'){qi++;qi<QS.length?renderQ():quizEnd()}
+  else if(id==='qRetry')quizStart();
+  else if(id==='bDl')downloadBadge();
+  else if(id==='bShare')shareBadge();
+});
+function quizEnd(){
+  if(score===QS.length)return showBadge(false);
+  box.innerHTML=`<div style="text-align:center"><div style="font-size:54px">${score>=3?'💪':'📚'}</div><h3>You got ${score} out of ${QS.length}</h3><p style="color:var(--ink2);margin:6px 0 18px">So close! You need all 5 to earn the badge. Peek at the simulator and the profit stairs, then try again.</p><button class="btn primary" id="qRetry">↺ Try again</button></div>`;
+}
+function showBadge(fromSaved){
+  const saved=store.get('lsp_badge',null);
+  if(!fromSaved)store.set('lsp_badge',{name:saved?saved.name:'',date:new Date().toISOString()});
+  const cur=store.get('lsp_badge',{});
+  box.innerHTML=`<div class="badge-wrap"><h3>${fromSaved?'🏅 Your badge':'🎉 5 out of 5 — perfect!'}</h3><p style="color:var(--ink2)">Type your name to put it on the badge.</p><input id="bName" placeholder="Your name" maxlength="28" value="${esc(cur.name||'')}" aria-label="Your name"><br><canvas id="bCanvas" width="1200" height="800" role="img" aria-label="Certified Safe Bot Trader badge"></canvas><div class="row-btns" style="justify-content:center"><button class="btn primary" id="bDl">📥 Download badge (PNG)</button><button class="btn ghost" id="bShare">📤 Share</button><button class="btn ghost" id="qRetry">↺ Retake quiz</button></div></div>`;
+  $('#bName').addEventListener('input',()=>{store.set('lsp_badge',{...store.get('lsp_badge',{}),name:$('#bName').value.trim()});drawBadge()});
+  drawBadge();if(!fromSaved)confetti();
+}
+function drawBadge(){
+  const c=$('#bCanvas');if(!c)return;const x=c.getContext('2d'),W=c.width,Hh=c.height,saved=store.get('lsp_badge',{});
+  const name=(saved.name||'Safe Trader').slice(0,28);
+  const g=x.createLinearGradient(0,0,W,Hh);g.addColorStop(0,'#0F172A');g.addColorStop(1,'#1E3A8A');x.fillStyle=g;x.fillRect(0,0,W,Hh);
+  x.strokeStyle='#FBBF24';x.lineWidth=10;x.strokeRect(30,30,W-60,Hh-60);x.strokeStyle='rgba(251,191,36,.45)';x.lineWidth=2;x.strokeRect(52,52,W-104,Hh-104);
+  x.textAlign='center';
+  x.font='130px "Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif';x.fillText('🛡️',W/2,225);
+  x.fillStyle='#93C5FD';x.font='600 30px system-ui,"Segoe UI",sans-serif';x.fillText('LSP TRADING TELEGRAM BOT · BOT ACADEMY',W/2,290);
+  x.fillStyle='#fff';x.font='900 84px system-ui,"Segoe UI",sans-serif';x.fillText('Certified',W/2,395);x.fillStyle='#FBBF24';x.fillText('Safe Bot Trader',W/2,490);
+  x.fillStyle='#CBD5E1';x.font='28px system-ui,"Segoe UI",sans-serif';x.fillText('awarded to',W/2,556);
+  x.fillStyle='#fff';x.font='italic 700 58px Georgia,serif';x.fillText(name,W/2,626);
+  const d=new Date(saved.date||Date.now());
+  x.fillStyle='#94A3B8';x.font='24px system-ui,"Segoe UI",sans-serif';x.fillText(`Score 5/5 · ${d.toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'})} · Practice simulator`,W/2,700);
+}
+function downloadBadge(){$('#bCanvas').toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='Certified_Safe_Bot_Trader.png';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),2000)})}
+async function shareBadge(){
+  const text='I just earned the “Certified Safe Bot Trader” badge from the LSP Trading Bot Academy! 🛡️';
+  try{
+    const blob=await new Promise(r=>$('#bCanvas').toBlob(r)), f=new File([blob],'Certified_Safe_Bot_Trader.png',{type:'image/png'});
+    if(navigator.canShare&&navigator.canShare({files:[f]}))return await navigator.share({files:[f],text});
+    if(navigator.share)return await navigator.share({text,url:location.href});
+    await navigator.clipboard.writeText(text+' '+location.href);toast('Copied to clipboard');
+  }catch(e){if(e.name!=='AbortError')toast('Download it and share the image')}
+}
+function confetti(){if(reduced)return;for(let i=0;i<36;i++){const s=document.createElement('span');s.className='conf';s.textContent=['🎉','✨','🛡️','⭐','🟢'][i%5];s.style.left=Math.random()*100+'vw';s.style.animationDelay=Math.random()*.8+'s';s.style.animationDuration=2+Math.random()*1.5+'s';document.body.append(s);setTimeout(()=>s.remove(),4800)}}
+store.get('lsp_badge',null)?.date?showBadge(true):quizStart();
+
+/* ================= PDF page gallery ================= */
+const PAGES=['Cover','What is this app?','Map & keyboard','Room 1 · Broker Hub','Room 2 · Strategy','Room 3 · OMS Orders','Room 4 · RMS & Risk','Room 5 · Ledger & EOD','Room 6 · System','Common tasks','Colour & symbols','FAQ','Daily SOP & contacts'];
+const img=i=>`page_images/page_${pad(i+1)}.png`;
+$('#gallery').innerHTML=PAGES.map((t,i)=>`<button class="thumb" data-p="${i}" aria-label="Preview page ${i+1}: ${esc(t)}"><img src="${img(i)}" alt="Booklet page ${i+1}: ${esc(t)}" loading="lazy"><span>${i+1}. ${esc(t)}</span></button>`).join('');
+const lb=$('#lb');let lp=0;
+function showLb(i){lp=(i+PAGES.length)%PAGES.length;lb.innerHTML=`<img src="${img(lp)}" alt="Booklet page ${lp+1}: ${esc(PAGES[lp])}"><div class="nav"><button class="btn ghost sm" data-lb="-1">‹ Prev</button><b>Page ${lp+1} of ${PAGES.length}</b><button class="btn ghost sm" data-lb="1">Next ›</button><button class="btn primary sm" data-lb="x">Close</button></div>`;lb.classList.add('open')}
+function closeLb(){lb.classList.remove('open');lb.innerHTML=''}
+$('#gallery').addEventListener('click',e=>{const t=e.target.closest('.thumb');if(t)showLb(+t.dataset.p)});
+lb.addEventListener('click',e=>{const b=e.target.closest('[data-lb]');if(b)b.dataset.lb==='x'?closeLb():showLb(lp+ +b.dataset.lb);else if(e.target===lb)closeLb()});
+
+/* ================= install as app (PWA) ================= */
+let deferredInstall=null;
+const isStandalone=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+const syncInstall=()=>$$('.install').forEach(b=>{b.hidden=isStandalone()});
+addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstall=e;syncInstall()});
+addEventListener('appinstalled',()=>{deferredInstall=null;syncInstall();toast('✅ App installed!')});
+$$('.install').forEach(b=>b.addEventListener('click',async()=>{
+  if(deferredInstall){deferredInstall.prompt();await deferredInstall.userChoice.catch(()=>{});deferredInstall=null;return}
+  const steps=isIOS
+    ?'<ol style="margin-left:20px"><li>Tap the <b>Share</b> button <span aria-hidden="true">⬆️</span> in Safari.</li><li>Scroll down and tap <b>Add to Home Screen</b>.</li><li>Tap <b>Add</b>. Open it from your home screen like any app.</li></ol>'
+    :'<ol style="margin-left:20px"><li>Open your browser menu <b>⋮</b> (or the address-bar install icon).</li><li>Tap <b>Install app</b> or <b>Add to Home screen</b>.</li><li>Open it from your home screen or app list.</li></ol>';
+  openModal(`<header><span class="e">📲</span><span id="mTitle">Install LSP Bot Academy</span></header><div class="mb"><p>Works offline once installed — no app store needed.</p>${steps}</div><div class="acts"><button class="btn primary" data-close>Got it</button></div>`,'info');
+}));
+syncInstall();
+matchMedia('(display-mode: standalone)').addEventListener?.('change',syncInstall);
+if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol))addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+
+/* ================= boot ================= */
+renderMissions();renderBoard();renderKb();
+say({tone:'ok',h:C('👋 Welcome to LSP Trading Bot',[],'This is a <b>practice</b> bot — nothing here is real.<br>Tap a room on the keyboard below, or try <b>💰 /margins</b>.')},500);
+})();
+</script>
+</body>
+</html>
