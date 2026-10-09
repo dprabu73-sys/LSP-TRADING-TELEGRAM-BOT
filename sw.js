@@ -1,11 +1,17 @@
 /* LSP Bot Academy service worker – offline support.
    Bump VERSION whenever any cached file changes. */
-const VERSION = 'v2';
+const VERSION = 'v3';
 const SHELL = `lsp-shell-${VERSION}`;
 const RUNTIME = `lsp-runtime-${VERSION}`;
 const SHELL_FILES = [
   './', './index.html', './manifest.webmanifest',
-  './icons/icon-192.png', './icons/icon-512.png', './icons/icon-maskable-512.png', './icons/apple-touch-icon.png'
+  './icons/icon-192.png', './icons/icon-512.png', './icons/icon-maskable-512.png', './icons/apple-touch-icon.png',
+  './fonts/baloo-thambi-2-latin-01b78b.woff2',
+  './fonts/baloo-thambi-2-tamil-58106a.woff2',
+  './fonts/fonts.css',
+  './fonts/noto-sans-tamil-latin-1e9fb6.woff2',
+  './fonts/noto-sans-tamil-tamil-c02305.woff2',
+  './fonts/nunito-latin-798ec6.woff2'
 ];
 
 self.addEventListener('install', e => {
